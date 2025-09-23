@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package demo;
+
+message MsgA {
+  string text = 1;
+}
+
+message MsgB {
+  int32 number = 1;
+}
+
+message MsgC {
+  double value = 1;
+}
+
+message Envelope {
+  oneof payload {
+    MsgA a = 1;
+    MsgB b = 2;
+    MsgC c = 3;
+  }
+}
