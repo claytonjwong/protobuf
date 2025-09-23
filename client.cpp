@@ -16,18 +16,18 @@ int main() {
     serverAddr.sin_port = htons(5555);
     inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
 
-    demo::Envelope env;
+    demo::Envelope envelope;
 
-    env.mutable_a()->set_text("Hello from UDP client");
-    sendEnvelope(sock, serverAddr, env);
+    envelope.mutable_a()->set_text("Hello from UDP client");
+    sendEnvelope(sock, serverAddr, envelope);
 
-    env.Clear();
-    env.mutable_b()->set_number(123);
-    sendEnvelope(sock, serverAddr, env);
+    envelope.Clear();
+    envelope.mutable_b()->set_number(123);
+    sendEnvelope(sock, serverAddr, envelope);
 
-    env.Clear();
-    env.mutable_c()->set_value(9.81);
-    sendEnvelope(sock, serverAddr, env);
+    envelope.Clear();
+    envelope.mutable_c()->set_value(9.81);
+    sendEnvelope(sock, serverAddr, envelope);
 
     close(sock);
     google::protobuf::ShutdownProtobufLibrary();

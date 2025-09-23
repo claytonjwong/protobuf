@@ -2,6 +2,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <cstring>
+#include <optional>
 #include "messages.pb.h"
 #include <google/protobuf/message.h>
 #include <google/protobuf/stubs/common.h>
@@ -21,22 +22,23 @@ int main() {
     std::cout << "UDP Server listening on port 5555...\n";
 
     while (true) {
-        demo::Envelope env;
-        sockaddr_in clientAddr{};
-        if (!recvEnvelope(sock, env, clientAddr)) continue;
+        std::optional<demo::Envelope> optional_envelope = recvEnvelope(sock);
+        if (!optional_envelope.has_value())
+        {
+            continue;
+        }
+        demo::Envelope envelope = optional_envelope.value();
 
-        switch (env.payload_case()) {
+        switch (envelope.payload_case()) {
             case demo::Envelope::kA:
-                std::cout << "Got MsgA: " << env.a().text() << "\n";
+                std::cout << "Got MsgA: " << envelope.a().text() << "\n";
                 break;
             case demo::Envelope::kB:
-                std::cout << "Got MsgB: " << env.b().number() << "\n";
+                std::cout << "Got MsgB: " << envelope.b().number() << "\n";
                 break;
             case demo::Envelope::kC:
-                std::cout << "Got MsgC: " << env.c().value() << "\n";
+                std::cout << "Got MsgC: " << envelope.c().value() << "\n";
                 break;
-            default:
-                std::cout << "Unknown message\n";
         }
     }
 
