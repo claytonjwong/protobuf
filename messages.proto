@@ -21,3 +21,7 @@ message Envelope {
     MsgC c = 3;
   }
 }
+
+message Mail {
+  repeated Envelope envelopes = 1;
+}

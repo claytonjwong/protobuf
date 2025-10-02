@@ -22,23 +22,33 @@ int main() {
     std::cout << "UDP Server listening on port 5555...\n";
 
     while (true) {
-        std::optional<demo::Envelope> optional_envelope = recvEnvelope(sock);
-        if (!optional_envelope.has_value())
-        {
+        // Try to receive a Mail message
+        std::optional<demo::Mail> optional_mail = recvMail(sock);
+        if (!optional_mail.has_value()) {
             continue;
         }
-        demo::Envelope envelope = optional_envelope.value();
+        demo::Mail mail = optional_mail.value();
+        std::cout << "Received Mail with " << mail.envelopes_size() << " envelopes\n";
 
-        switch (envelope.payload_case()) {
-            case demo::Envelope::kA:
-                std::cout << "Got MsgA: " << envelope.a().text() << "\n";
-                break;
-            case demo::Envelope::kB:
-                std::cout << "Got MsgB: " << envelope.b().number() << "\n";
-                break;
-            case demo::Envelope::kC:
-                std::cout << "Got MsgC: " << envelope.c().value() << "\n";
-                break;
+        // Process each envelope in the mail
+        for (int i = 0; i < mail.envelopes_size(); i++) {
+            const demo::Envelope& envelope = mail.envelopes(i);
+            std::cout << "Processing envelope " << i + 1 << ":\n";
+
+            switch (envelope.payload_case()) {
+                case demo::Envelope::kA:
+                    std::cout << "  MsgA: " << envelope.a().text() << "\n";
+                    break;
+                case demo::Envelope::kB:
+                    std::cout << "  MsgB: " << envelope.b().number() << "\n";
+                    break;
+                case demo::Envelope::kC:
+                    std::cout << "  MsgC: " << envelope.c().value() << "\n";
+                    break;
+                default:
+                    std::cout << "  Unknown message type\n";
+                    break;
+            }
         }
     }
 
