@@ -9,14 +9,20 @@ cmake .. && make
 
 ## Run Server
 ```
-build git:(main) ✗ ./server
+➜  protobuf git:(main) ✗ ./run_server.sh &
+[1] 534717
 UDP Server listening on port 5555...
-Got MsgA: Hello from UDP client
-Got MsgB: 123
-Got MsgC: 9.81
 ```
 
 ## Run Client
 ```
-build git:(main) ✗ ./client
+➜  protobuf git:(main) ✗ ./run_client.sh
+Sending Mail with 3 envelopes
+Received Mail with 3 envelopes
+Processing envelope 1:
+  MsgA: Hello from UDP client
+Processing envelope 2:
+  MsgB: 123
+Processing envelope 3:
+  MsgC: 9.81
 ```
